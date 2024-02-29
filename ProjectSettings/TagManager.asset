@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interactable
   - Recollectable
+  - Bala
   layers:
   - Default
   - TransparentFX
@@ -15,15 +16,15 @@ TagManager:
   - UI
   - Ground
   - PostProcessing
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Cuarto1
+  - Cuarto2
+  - Cuarto3
+  - Cuarto4
+  - Exterior
+  - Enemy
+  - Bala
+  - Techo
   - 
   - 
   - 
