@@ -1,0 +1,13 @@
+# Blender MTL File: 'baseballbat.blend'
+# Material Count: 1
+
+newmtl Mat_BaseballBat
+Ns 475.428503
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.290408 0.290408 0.290408
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Textures\\Wood09_MR_2K\\Wood09_2K_BaseColor.png
