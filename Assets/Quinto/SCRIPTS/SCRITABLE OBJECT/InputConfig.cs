@@ -26,5 +26,7 @@ public class InputConfig : ScriptableObject
 
     public KeyCode shoot = KeyCode.Mouse0;
     public KeyCode reloadKey = KeyCode.R;
+
+    public KeyCode AimKey = KeyCode.Mouse1;
 }
 

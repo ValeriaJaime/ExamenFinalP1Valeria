@@ -186,7 +186,7 @@ public class Test : MonoBehaviour
 
     void OldShootInput()
     {
-        if (InputHandler.ShootInput())
+        if (InputHandler.ShootKey())
         {
             Debug.Log("Dispara viejo");
         }
@@ -202,7 +202,7 @@ public class Test : MonoBehaviour
 
     void OldReloadInput()
     {
-        if (InputHandler.ReloadInput())
+        if (InputHandler.Reload())
         {
             Debug.Log("Recarga viejo");
         }
