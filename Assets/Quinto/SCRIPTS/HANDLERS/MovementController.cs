@@ -4,209 +4,194 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Test : MonoBehaviour
+public class MovementController : MonoBehaviour
 {
     [SerializeField] private InputSystem inputSystem;
 
-    [SerializeField] private float speed = 5;
-    [SerializeField] private float rotateSpeed = 12;
-    [SerializeField] private float walkingSpeed = 5;
-    [SerializeField] private float runningSpeed = 10;
-    [SerializeField] private float jumpForce = .1f;
+    [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 5f;
 
     Vector2 moveDirection = Vector2.zero;
-
+    Vector2 rotateDirection = Vector2.zero;
 
     private Action Movement;
     private Action Rotation;
-    private Action Shoot;
-    private Action Jump;
-    private Action Run;
-    private Action Reload;
 
     private PlayerInput input;
 
-    private Rigidbody playerRb;
 
-    public void TriggerEnter()
-    {
-        Debug.Log(gameObject.name + "  entró en un trigger");
-    }
+//#if UNITY_EDITOR        //que esto así porque funciona en el editor nada más
 
-    public void TriggerExit()
-    {
-        Debug.Log(gameObject.name + " salió de un trigger");
-    }
+//    private void OnValidate()
+//    {
+//        switch (inputSystem)
+//        {
+//            case InputSystem.OldInputSystem:
+//                {
+//                    Movement = OldInputSystemMovement;
+//                    Rotation = OldInputSystemRotation;
+//                    break;
+//                }
 
-    public void TriggerStay() 
-    {
-        Debug.Log(gameObject.name + " se queda en el trigger");
-    }
+//            case InputSystem.NewInputSystem:
+//                {
+//                    Movement = NewInputSystemMovement;
+//                    Rotation = NewInputSystemRotation;
+//                    break;
+//                }
+//        }
+//    }
 
-    private void OnValidate()
+//#endif
+
+    private void Start()            //y que esto lo pongamos en el Start porque si no no hace nada
     {
+        Debug.Log("Hola start");
+        input = GetComponent<PlayerInput>();
+
         switch (inputSystem)
         {
             case InputSystem.OldInputSystem:
                 {
-                    Movement = OldInputMovement;
-                    Rotation = OldInputRotation;
-                    Jump = OldInputJump;
-                    Shoot = OldShootInput;
-                    Reload = OldReloadInput;
+                    Movement = OldInputSystemMovement;
+                    Rotation = OldInputSystemRotation;
                     break;
                 }
 
-            case InputSystem.NewInputSystem: 
+            case InputSystem.NewInputSystem:
                 {
-                    Movement = NewInputMovement;
-                    Rotation = NewInputRotation;
-                    Jump = NewJumpInput;
-                    Shoot = NewShootInput;
-                    Reload = NewReloadInput;
+                    Movement = NewInputSystemMovement;
+                    Rotation = NewInputSystemRotation;
                     break;
                 }
         }
     }
 
-    private void Start()
-    {
-        input = GetComponent<PlayerInput>();
-        playerRb = GetComponent<Rigidbody>();
-    }
-
-    private void Update()
+    private void FixedUpdate()   //que lo cambiemos a FixUpdate
     {
         Movement();
         Rotation();
-        Jump();
-        //Shoot();
-        Reload();
-    }   
-
-    void NewInputMovement()
-    {
-        playerRb.position += this.transform.rotation * new Vector3(x: 0, y: 0, z: NewMoveDirection()) * (NewActualSpeed() * Time.deltaTime);
-        //transform.position += this.transform.rotation * new Vector3(x: 0, y: 0, z: NewMoveDirection()) * (ActualSpeed() * Time.deltaTime);
     }
 
-    void NewInputRotation()
+    #region New Input System
+
+    private void NewInputSystemMovement()
     {
-        transform.Rotate(new Vector3(x: 0, y: NewRotateDirection(), z: 0) * (rotateSpeed * Time.deltaTime));
+        transform.position += this.transform.rotation * new Vector3(0, 0, NewInputSystemMovementDirection()) * (movementSpeed * Time.deltaTime);
     }
 
-    float NewMoveDirection()
+    private void NewInputSystemRotation()
     {
+
+        transform.Rotate(new Vector3(0, NewInputSystemRotationDirection(), 0) * (rotationSpeed * Time.deltaTime));
+
+    }
+
+    private float NewInputSystemMovementDirection()
+    {
+
         return input.actions["Move"].ReadValue<Vector2>().y;
+
     }
 
-    float NewRotateDirection()
+    private float NewInputSystemRotationDirection()
     {
+
         return input.actions["Move"].ReadValue<Vector2>().x;
+
     }
 
-    void OldInputMovement()
+    #endregion
+
+    #region Old Input System
+
+    private void OldInputSystemRotation()
     {
-        playerRb.position += this.transform.rotation * new Vector3(x: 0, y: 0, z: OldMoveDirection().y) * (OldActualSpeed() * Time.deltaTime);
-        //transform.position += this.transform.rotation * new Vector3(x: 0, y: 0, z: OldMoveDirection().y) * (ActualSpeed() * Time.deltaTime);
+        transform.Rotate(new Vector3(0, OldSystemRotationDirection().x, 0) * (rotationSpeed * Time.deltaTime));
     }
 
-    void OldInputRotation()
+    private void OldInputSystemMovement()
     {
-        transform.Rotate(new Vector3(x: 0, y: OldRotateDirection().x, z: 0) * (rotateSpeed * Time.deltaTime));
+        transform.position += this.transform.rotation * new Vector3(0, 0, OldSystemMovementDirection().y) * (movementSpeed * Time.deltaTime);
     }
 
-    Vector2 OldMoveDirection()
+    private Vector2 OldSystemMovementDirection()
     {
+        moveDirection = Vector2.zero;
+
         if (InputHandler.MoveForwardInput())
         {
+
             moveDirection += Vector2.up;
+
         }
 
         if (InputHandler.MoveBackwardInput())
         {
+
             moveDirection += Vector2.down;
+
         }
 
-        return moveDirection != Vector2.zero ? moveDirection.normalized : Vector2.zero;
+        //if (!InputHandler.MoveForwardInput() && !InputHandler.MoveBackwardInput())    QUITA ESTE, que porque el signo ! significa que no estás tocando el input,
+        //pero si no lo tocaste no deberías tener un if para no tocarlo.
+        //{
+
+        //    moveDirection = Vector2.zero;
+
+        //}
+
+        return moveDirection.normalized;
+
     }
 
-    Vector2 OldRotateDirection()
+    private Vector2 OldSystemRotationDirection()
     {
-        if (InputHandler.RotateLeftInput())
-        {
-            moveDirection += Vector2.left;
-        }
+        rotateDirection = Vector2.zero;     //LE PONEMOS EL ZERO PARA QUE TENGA UNA RESPUESTA, PARA QUE NO SEA NULO
 
         if (InputHandler.RotateRightInput())
         {
-            moveDirection += Vector2.right;
+
+            rotateDirection += Vector2.right;
+
         }
-
-        return moveDirection != Vector2.zero ? moveDirection.normalized : Vector2.zero;
-    }
-
-    private float NewActualSpeed()
-    {
-        return input.actions["Run"].WasPressedThisFrame() ? runningSpeed : walkingSpeed;
-    }
-
-    private float OldActualSpeed()
-    {
-        // Si estoy presionando el input de correr, va a regresar runningSpeed, si no va a regresar walkingSpeed
-        return InputHandler.RunInput() ? runningSpeed : walkingSpeed;
-    }
-
-    void NewJumpInput()
-    {
-        //input.actions["Jump"].WasPressedThisFrame();
-        if (input.actions["Jump"].WasPressedThisFrame())
+        if (InputHandler.RotateLeftInput())
         {
-            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            Debug.Log("Salta nuevo");
+
+            rotateDirection += Vector2.left;
+
         }
+        //if (!InputHandler.RotateRightInput() && !InputHandler.RotateLeftInput())    QUITAMOS ESTE IF 
+        //{
+
+        //    rotateDirection = Vector2.zero;
+
+        //}
+
+        return rotateDirection.normalized;
+
     }
 
-    void OldInputJump()
+    #endregion
+
+
+    public void TriggerEnter()
     {
-        if (InputHandler.JumpInput())
-        {
-            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            Debug.Log("Salta viejo");
-        }
+        Debug.Log(gameObject.name + " entro en un trigger");
     }
 
-    void NewShootInput()
+    public void TriggerExit()
     {
-        if (input.actions["Shoot"].WasPressedThisFrame())
-        {
-            Debug.Log("Dispara nuevo");
-        }
+        Debug.Log(gameObject.name + " salio de un trigger");
+
     }
 
-    void OldShootInput()
+    public void TriggerStay()
     {
-        if (InputHandler.ShootKey())
-        {
-            Debug.Log("Dispara viejo");
-        }
+        Debug.Log(gameObject.name + " esta en un trigger");
     }
 
-    void NewReloadInput()
-    {
-        if (input.actions["Reload"].WasPressedThisFrame())
-        {
-            Debug.Log("Recarga nuevo");
-        }
-    }
 
-    void OldReloadInput()
-    {
-        if (InputHandler.Reload())
-        {
-            Debug.Log("Recarga viejo");
-        }
-    }
 }
 
 public enum InputSystem

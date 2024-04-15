@@ -55,6 +55,11 @@ public class InputHandler : MonoBehaviour
         return Input.GetKeyDown(_actualConfig.shoot);
     }
 
+    public static bool AutomaticShotKey()
+    {
+        return Input.GetKey(_actualConfig.shoot);
+    }
+
     public static bool Reload()
     {
         return Input.GetKeyDown(_actualConfig.reloadKey);

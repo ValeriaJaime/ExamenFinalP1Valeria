@@ -139,7 +139,7 @@ namespace WEAPON
 
         private void AutomaticWeapon()
         {
-            if (InputHandler.ShootKey())
+            if (InputHandler.AutomaticShotKey())
             {
                 UseAndHoldHeapon();
             }
