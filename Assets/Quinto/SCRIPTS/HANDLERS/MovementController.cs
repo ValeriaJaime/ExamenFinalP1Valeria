@@ -19,6 +19,8 @@ public class MovementController : MonoBehaviour
 
     private PlayerInput input;
 
+    [SerializeField] private Animator animator;
+
 
 //#if UNITY_EDITOR        //que esto así porque funciona en el editor nada más
 
@@ -124,12 +126,16 @@ public class MovementController : MonoBehaviour
 
             moveDirection += Vector2.up;
 
+            animator.Play("Walking");
+
         }
 
         if (InputHandler.MoveBackwardInput())
         {
 
             moveDirection += Vector2.down;
+
+            animator.Play("Walking");
 
         }
 

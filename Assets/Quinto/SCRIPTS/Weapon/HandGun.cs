@@ -78,11 +78,11 @@ namespace WEAPON
                             hit.rigidbody.AddForce(-hit.normal * rayForce);
                         }
 
-                        //if (hit.transform.CompareTag("Enemy"))
-                        //{
-                        //    Debug.Log("Golpeaste a un enemigo");
-                        //    /*hit.transform.GetComponent<EnemyLife>().TakeDamage(rayDamage / (hit.distance));*/  //aquí estamos mandando al TakeDamage el damage, que es lo que está dentro de los paréntesis
-                        //}
+                        if (hit.transform.CompareTag("Enemy"))
+                        {
+                            Debug.Log("Golpeaste a un enemigo");
+                            hit.transform.GetComponent<EnemyLifeDef>().TakeDamage(damage); //aquí estamos mandando al TakeDamage el damage, que es lo que está dentro de los paréntesis
+                        }
 
                         lastTimeShoot = Time.time;
                     }

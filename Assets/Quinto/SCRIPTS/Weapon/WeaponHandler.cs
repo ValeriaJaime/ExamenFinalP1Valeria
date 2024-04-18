@@ -43,22 +43,30 @@ namespace WEAPON
         {
             if (InputHandler.Scroll() > 0)//si el scroll es mayor a cero, es 1, significa que fue hacia arriba
             {
+                //currentWeapon.enabled = false;
+
                 currentWeaponIndex++; //se suma uno al weapon index
 
                 currentWeaponIndex = currentWeaponIndex >= weapons.Length ? 0 : currentWeaponIndex;
 
                 currentWeapon = weapons[currentWeaponIndex]; //cambias al arma con ese index
 
+                //currentWeapon.enabled = true;
+
                 SwitchFunction(); //y pasa este, que cambia las acciones en sí
             }
 
             else if (InputHandler.Scroll() < 0) //fuiste hacia abajo
             {  
+                //currentWeapon.enabled = false;
+
                 currentWeaponIndex--;
 
                 currentWeaponIndex = currentWeaponIndex < 0 ? weapons.Length-1 : currentWeaponIndex;
 
                 currentWeapon = weapons[currentWeaponIndex];
+
+                //currentWeapon.enabled = true;
 
                 SwitchFunction();
             }

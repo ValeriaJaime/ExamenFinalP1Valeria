@@ -9,7 +9,7 @@ namespace  WEAPON
     public class ShotGun : FireWeapon
     {
         [Header("General")]
-        protected TrailRenderer gunLaser;
+        [SerializeField] protected TrailRenderer gunLaser;
         [SerializeField] private Transform raycastOrigin;
         private RaycastHit hit;
         [SerializeField] private GameObject bulletPrefabSprite;
@@ -74,6 +74,10 @@ namespace  WEAPON
 
                     Physics.Raycast(raycastOrigin.position, direction, out hit, rayDistance, hitMask);
 
+                    TrailRenderer trail = Instantiate(gunLaser, raycastOrigin.position, Quaternion.identity);
+
+                    StartCoroutine(SpawnTrail(trail, hit));
+
                     birdshot--;
 
                     if (hit.transform != null)
@@ -101,6 +105,24 @@ namespace  WEAPON
                     }
                 }
             }
+        }
+
+        private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)
+        {
+            float time = 0;
+            Vector3 startPosition = trail.transform.position;
+
+            while (time < 1)
+            {
+                trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
+                time += Time.deltaTime / trail.time;
+
+                yield return null;
+            }
+
+            trail.transform.position = hit.point;
+
+            Destroy(trail.gameObject, trail.time);
         }
 
         private Transform RandomShootingPoint()

@@ -27,7 +27,7 @@ namespace WEAPON
         [SerializeField] internal int bulletPerBurst;//no se va a cambiar el tipo de disparo entonces por ahora no 
 
         [Header("General")]
-        internal TrailRenderer gunLaser; //un laser que muestra a dónde apuntas
+        [SerializeField] internal TrailRenderer gunLaser; //un laser que muestra a dónde apuntas
         [SerializeField] internal Transform laserOrigin;
 
         [SerializeField] internal Transform raycastOrigin;
@@ -61,6 +61,8 @@ namespace WEAPON
             reloadTime = 1.5f;
 
             actualAmmo = maxAmmo;
+
+            //gunLaser = GetComponent<TrailRenderer>();
         }
 
         internal override void AutomaticShot()//disparo con raycast
@@ -72,9 +74,9 @@ namespace WEAPON
                     Debug.Log("Disparo básico con " + name);
                     Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, rayDistance, hitMask);
 
-                    //TrailRenderer trail = Instantiate(gunLaser, raycastOrigin.position, Quaternion.identity);
+                    TrailRenderer trail = Instantiate(gunLaser, raycastOrigin.position, Quaternion.identity);
 
-                    //StartCoroutine(SpawnTrail(trail, hit));
+                    StartCoroutine(SpawnTrail(trail, hit)); 
 
                     actualAmmo--;
 
@@ -103,6 +105,24 @@ namespace WEAPON
                     }
                 }
             }
+        }
+
+        private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)
+        {
+            float time = 0;
+            Vector3 startPosition = trail.transform.position;
+
+            while (time < 1)
+            {
+                trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
+                time += Time.deltaTime / trail.time;
+
+                yield return null;
+            }
+
+            trail.transform.position = hit.point;
+
+            Destroy(trail.gameObject, trail.time);
         }
 
         internal override void Reload()

@@ -11,10 +11,18 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private InputConfig actualConfig;
     private static InputConfig _actualConfig;
 
+    private void Start()
+    {
+        _actualConfig = actualConfig;
+    }
+
+#if UNITY_EDITOR 
     private void OnValidate()
     {
         _actualConfig = actualConfig;
     }
+
+#endif
 
     public static bool MoveForwardInput()
     {
