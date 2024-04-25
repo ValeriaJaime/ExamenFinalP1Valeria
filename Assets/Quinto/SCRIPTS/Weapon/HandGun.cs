@@ -36,6 +36,9 @@ namespace WEAPON
 
         private float lastTimeShoot = Mathf.NegativeInfinity;
 
+
+        [SerializeField] private Animator animator;
+
         private void Start()
         {
             damage = 1;
@@ -82,6 +85,11 @@ namespace WEAPON
                         {
                             Debug.Log("Golpeaste a un enemigo");
                             hit.transform.GetComponent<EnemyLifeDef>().TakeDamage(damage); //aquí estamos mandando al TakeDamage el damage, que es lo que está dentro de los paréntesis
+                        }
+
+                        else
+                        {
+                            Debug.Log("No golpeaste enemigos");
                         }
 
                         lastTimeShoot = Time.time;
@@ -135,6 +143,7 @@ namespace WEAPON
         internal override void Aim() //la mira es la parte visual del raycast
         {
             Debug.Log("Apuntando con " + name);
+            animator.Play("Rifle Aiming Idle");
         }
     }
 

@@ -37,6 +37,9 @@ namespace WEAPON
             _automaticRfileScript.raycastOrigin = (Transform)EditorGUILayout.ObjectField("Raycast Origin", _automaticRfileScript.raycastOrigin, typeof(Transform), true);
 
             _automaticRfileScript.bulletPrefabSprite = (GameObject)EditorGUILayout.ObjectField("Bullet Prefab Sprite", _automaticRfileScript.bulletPrefabSprite, typeof(GameObject), true);
+
+            _automaticRfileScript.animator = (Animator)EditorGUILayout.ObjectField("Animator", _automaticRfileScript.animator, typeof(Animator), true);
+
             _automaticRfileScript.hitMask = EditorGUILayout.MaskField("Hit mask", _automaticRfileScript.hitMask, UnityEditorInternal.InternalEditorUtility.layers);
 
             _automaticRfileScript.rayDistance = EditorGUILayout.FloatField("Distancia del raycast", _automaticRfileScript.rayDistance);

@@ -50,6 +50,8 @@ namespace WEAPON
 
         private float lastTimeShoot = Mathf.NegativeInfinity;
 
+        [SerializeField] internal Animator animator;
+
 
         private void Awake()
         {
@@ -63,6 +65,7 @@ namespace WEAPON
             actualAmmo = maxAmmo;
 
             //gunLaser = GetComponent<TrailRenderer>();
+            animator = GetComponentInParent<Animator>();
         }
 
         internal override void AutomaticShot()//disparo con raycast
@@ -95,11 +98,16 @@ namespace WEAPON
                             hit.rigidbody.AddForce(-hit.normal * rayForce);
                         }
 
-                        //if (hit.transform.CompareTag("Enemy"))
-                        //{
-                        //    Debug.Log("Golpeaste a un enemigo");
-                        //    /*hit.transform.GetComponent<EnemyLife>().TakeDamage(rayDamage / (hit.distance));*/  //aquí estamos mandando al TakeDamage el damage, que es lo que está dentro de los paréntesis
-                        //}
+                        if (hit.transform.CompareTag("Enemy"))
+                        {
+                            Debug.Log("Golpeaste a un enemigo");
+                            hit.transform.GetComponent<EnemyLifeDef>().TakeDamage(damage); //aquí estamos mandando al TakeDamage el damage, que es lo que está dentro de los paréntesis
+                        }
+
+                        else
+                        {
+                            Debug.Log("No golpeaste enemigos");
+                        }
 
                         lastTimeShoot = Time.time;
                     }
@@ -151,6 +159,7 @@ namespace WEAPON
         internal override void Aim()
         {
             Debug.Log("Apuntando con " + name);
+            animator.Play("Rifle Aiming Idle");
         }
     }
 

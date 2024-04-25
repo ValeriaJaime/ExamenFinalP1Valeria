@@ -35,6 +35,9 @@ namespace  WEAPON
 
         private float lastTimeShoot = Mathf.NegativeInfinity;
 
+
+        [SerializeField] private Animator animator;
+
         /// <summary>
         /// Aqui lo que tienen que hacer, es tener minimo 9
         /// raycast, estos saldran de el arreglo de BirdShotOrigin
@@ -95,11 +98,16 @@ namespace  WEAPON
                             hit.rigidbody.AddForce(-hit.normal * rayForce);
                         }
 
-                        //if (hit.transform.CompareTag("Enemy"))
-                        //{
-                        //    Debug.Log("Golpeaste a un enemigo");
-                        //    /*hit.transform.GetComponent<EnemyLife>().TakeDamage(rayDamage / (hit.distance));*/  //aquí estamos mandando al TakeDamage el damage, que es lo que está dentro de los paréntesis
-                        //}
+                        if (hit.transform.CompareTag("Enemy"))
+                        {
+                            Debug.Log("Golpeaste a un enemigo");
+                            hit.transform.GetComponent<EnemyLifeDef>().TakeDamage(damage); //aquí estamos mandando al TakeDamage el damage, que es lo que está dentro de los paréntesis
+                        }
+
+                        else
+                        {
+                            Debug.Log("No golpeaste enemigos");
+                        }
 
                         lastTimeShoot = Time.time;
                     }
@@ -158,6 +166,7 @@ namespace  WEAPON
         internal override void Aim()   //diferente imagen para todas las miras de todas las armas
         {
             Debug.Log("Apuntando con " + name);
+            animator.Play("Rifle Aiming Idle");
         }
     }
 

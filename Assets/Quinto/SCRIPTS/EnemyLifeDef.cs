@@ -10,6 +10,7 @@ namespace WEAPON
         [SerializeField] private Rigidbody rb;
         [SerializeField] private GameObject arma;
         [SerializeField] private float receivedDamage = 1;
+        [SerializeField] private float damageFisico;
         [SerializeField] private GameObject spawner;
         [SerializeField] internal bool haMuerto = false;
         //private Renderer rend;
@@ -23,28 +24,28 @@ namespace WEAPON
             spawner = GameObject.Find("Spawner");
         }
 
-        //private void OnTriggerEnter(Collider bullet)
-        //{
+        private void OnTriggerEnter(Collider bala)
+        {
 
-        //    if (bullet.CompareTag("Bala"))
-        //    {
-        //        Debug.Log("Entró la bala");
-        //        receivedDamage = bullet.GetComponentInParent<Arma>().weaponDamage;
-        //        Debug.Log("Received damage = " + receivedDamage);
+            if (bala.CompareTag("Bala"))
+            {
+                Debug.Log("Lo golpearon");
+                damageFisico = 1;
+                Debug.Log("Received damage = " + damageFisico);
 
-        //        Debug.Log("El danio es igual a " + receivedDamage);
-        //        TakeDamage();
-        //    }
+                Debug.Log("El danio es igual a " + damageFisico);
+                TakeDamageFisico();
+            }
 
-        //    else
-        //    {
-        //        Debug.Log("Nada");
-        //    }
-        //}
+            else
+            {
+                Debug.Log("Nada");
+            }
+        }
         internal void TakeDamage(int receivedDamage)
         {
             //AudioManager.Instance.PlayMusic("Hit");
-            vida -= receivedDamage;
+            vida = vida - receivedDamage;
             Debug.Log(vida + " - " + receivedDamage);
             //rend.material = danioMaterial;
             //lastimao = true;
@@ -62,6 +63,29 @@ namespace WEAPON
 
             Debug.Log("No se destruyó haha");
         }
+
+        private void TakeDamageFisico()
+        {
+            //AudioManager.Instance.PlayMusic("Hit");
+            vida -= damageFisico;
+            Debug.Log(vida + " - " + damageFisico);
+            //rend.material = danioMaterial;
+            //lastimao = true;
+            //StartCoroutine(daniTime());
+
+            if (vida <= 0)
+            {
+                //Destroy(this.gameObject);
+                vida = 0;
+                Debug.Log("Te va a decir que murió");
+                haMuerto = true;
+                //spawner.GetComponent<Spawner>().EnemigoMuerto(true);
+                Debug.Log("Ya murió");
+            }
+
+            Debug.Log("No se destruyó haha");
+        }
+
     }
 
 }

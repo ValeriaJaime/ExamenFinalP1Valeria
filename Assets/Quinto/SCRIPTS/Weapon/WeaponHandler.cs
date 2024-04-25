@@ -82,7 +82,7 @@ namespace WEAPON
                     {
                         UseWeapon = currentWeapon.MeleeAttack;
                         UseAndHoldHeapon = currentWeapon.ChargedMeleeAttack;
-                        WeaponAim = currentWeapon.Aim;
+                        WeaponAim = null;
                         Reload = null;
                         WeaponInputs = HeavyMeleeWeapon;  //aquí cambia los inputs en las acciones
                         break;
@@ -91,7 +91,7 @@ namespace WEAPON
                 case PesoPluma:
                     {
                         UseWeapon = currentWeapon.MeleeAttack;
-                        UseAndHoldHeapon = currentWeapon.ChargedMeleeAttack;
+                        UseAndHoldHeapon = null;
                         WeaponAim = null;
                         Reload = null;
                         WeaponInputs = LightMeleeWeapon;
@@ -188,10 +188,10 @@ namespace WEAPON
                 UseWeapon();
             }
 
-            if (InputHandler.AimInput())
-            {
-                WeaponAim();
-            }
+            //if (InputHandler.AimInput())
+            //{
+            //    WeaponAim();
+            //}
         }
 
         private void HeavyMeleeWeapon()
@@ -206,10 +206,10 @@ namespace WEAPON
                 UseAndHoldHeapon();
             }
 
-            if (InputHandler.AimInput())
-            {
-                WeaponAim();
-            }
+            //if (InputHandler.AimInput())
+            //{
+            //    WeaponAim();
+            //}
         }
 
     }
